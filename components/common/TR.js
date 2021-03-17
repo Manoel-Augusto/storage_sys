@@ -35,12 +35,19 @@ export default function TR({data, handleCheck}){
                onChange={() => handleCheck([data.id])}/>
          </td>
          <td>
-            <Link href={data.path_lower}>
-               <a className="link-dark">
+            {data[".tag"] === "folder" ? 
+               <Link href={data.path_lower}>
+                  <a className="link-dark">
+                     <div className="d-inline me-2">{icon}</div>
+                     <div className="d-inline">{data.name.replace(/(.{35})..+/, "$1...")}</div>
+                  </a>
+               </Link>
+               :
+               <>
                   <div className="d-inline me-2">{icon}</div>
                   <div className="d-inline">{data.name.replace(/(.{35})..+/, "$1...")}</div>
-               </a>
-            </Link>
+               </>
+            }
          </td>
          <td>{data.client_modified ? new Date(data.client_modified).toLocaleString() : "--"}</td>
       </tr>

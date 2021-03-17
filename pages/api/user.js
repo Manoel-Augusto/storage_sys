@@ -3,37 +3,21 @@ const { loginMongo } = require('../../models/mongo');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const getUser = async(_id)=>{
-   let {db, client} = await loginMongo(process.env.MONGODB, 'users')
-   let result = await db.findOne({_id: new ObjectID(_id)},{ projection:{_id:0,password:0}})
-   client.close()
-   return result
-}
-
 const updateUser = async(_id, data={})=>{
    let {db, client} = await loginMongo(process.env.MONGODB, 'users')
-   let result = await db.update({_id: new ObjectID(_id)},{$set: data})
+   let rt = await db.update({_id: new ObjectID(_id)},{$set: data})
    client.close()
-   return result ? true : false
+   return rt ? true : false
 }
 
 export default async function handler(req, res){
    try{
-      const { method, headers:{authorization} } = req;
-      if(authorization){
-         const token = authorization.split(' ')[1];
+      const { method, cookies:{tk} } = req;
+      if(tk){
          switch(method){
-            case 'GET':
-               try{
-                  let { id } = jwt.verify(token, process.env.JWTSECRET);
-                  res.status(200).json(await getUser(id))
-               }catch(e){
-                  res.status(200).json(false)
-               }
-               break;
             case 'PUT':
                try{
-                  let { id } = jwt.verify(token, process.env.JWTSECRET);
+                  let { id } = jwt.verify(tk, process.env.JWTSECRET);
                   if(req.body.password){
                      const hash = bcrypt.hashSync(req.body.password, 10);
                      req.body.password = hash

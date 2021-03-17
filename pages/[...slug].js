@@ -7,26 +7,25 @@ import Login from '../components/login';
 export default function Index(){
    const router = useRouter()
    const { slug } = router.query
-   const { session, authenticated } = useAuth()
+   const { session, loading} = useAuth()
    const { setListRecords, setCheckAll } = useData()
 
-   useEffect(async()=>{
-      if(authenticated && session){
-         let { entries } = await (await fetch(`/api/get-list-folder/${slug.join('/')}`,{headers: {'Authorization':`Bearer ${session.token}`}})).json()
-         if(entries){
-            setListRecords(entries)
-            setCheckAll(false)
+   useEffect(()=>{
+      const getData = async()=>{
+         if(session){
+            let { entries } = await fetch(`/api/get-list-folder/${slug.join('/')}`).then(res => res.json())
+            if(entries){
+               setListRecords(entries)
+               setCheckAll(false)
+            }
          }
       }
-   },[router, authenticated])
+      getData()
+   },[loading, router])
 
-   if(!authenticated){
-      return (
-         <Login/>
-      )
-   }
 
-   return (
-      <App/>
-   )
+   return (<>
+      {!loading && !session && <Login/> }
+      {!loading && session && <App/> }
+   </>)
 }

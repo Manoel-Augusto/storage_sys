@@ -1,19 +1,20 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { serialize } = require('cookie');
 const { loginMongo } = require('../../models/mongo');
 
 const auth = async(email, password)=>{
    let {db, client} = await loginMongo(process.env.MONGODB, 'users')
-   let emailExist = await db.findOne({email},{ projection:{_id:1,name:1,password:1}})
+   let emailExist = await db.findOne({email})
    client.close()
    if(emailExist){
-      let { _id:id, name, password:password_crypt } = emailExist
+      let { _id:id, password:password_crypt, ...rest } = emailExist
       if(bcrypt.compareSync(password, password_crypt)){
          let token = jwt.sign({id}, process.env.JWTSECRET, {expiresIn: '1d'})
-         return {name, token}
+         return {token, ...rest}
       }
    }
-   return false
+   return {error: true}
 }
 
 export default async function handler(req, res){
@@ -21,7 +22,17 @@ export default async function handler(req, res){
       const { method } = req;
       if(method === 'POST'){
          let { email, password } = req.body
-         res.status(200).json(await auth(email,password))
+         let { token, ...rest } = await auth(email,password)
+         if(token){
+            res.setHeader('Set-Cookie', serialize('tk', token, {
+               httpOnly: true,
+               secure: process.env.NODE_ENV !== 'development',
+               sameSite: 'strict',
+               maxAge: 3600,
+               path: '/'
+            }));
+         }
+         res.status(200).json(rest)
       }else{
          res.status(405).end(`Method ${method} Not Allowed`)
       }

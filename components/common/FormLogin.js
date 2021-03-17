@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useAuth } from '../../contexts';
 
 export default function FormLogin(){
    const { createSession } = useAuth()
    const [submitOk,setSubmitOk] = useState(false)
    const [email,setEmail] = useState('')
-   const [password,setPassword] = useState('')
+   const [password,setPassword] = useState(''), elPassword = useRef()
 
    const checkEmailExist = async (e) => {
       if(e.target.value){
-         let exist = await fetch(`/api/check-email?email=${e.target.value}`)
-         exist = await exist.json()
+         let exist = await fetch(`/api/check-email?email=${e.target.value}`).then(res => res.json())
          if(exist){
             e.target.className = "form-control"
             setSubmitOk(true)
@@ -26,15 +25,16 @@ export default function FormLogin(){
 
    const sendData = async(e)=>{
       e.preventDefault()
-      let rt = await fetch('/api/auth', {
+      let {error, ...rest} = await fetch('/api/auth', {
          method:'POST',
          body:JSON.stringify({email,password}),
          headers:{'Content-Type': 'application/json'}
-      })
-      rt = await rt.json()
-      if(rt){
-         await createSession(rt)
+      }).then(res => res.json())
+      if(!error){
+         await createSession(rest)
+         return
       }
+      elPassword.current.className = "form-control is-invalid"
    }
 
    return(
@@ -64,6 +64,7 @@ export default function FormLogin(){
                      <input className="form-control"
                         type="password"
                         id="password"
+                        ref={elPassword}
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
                         required

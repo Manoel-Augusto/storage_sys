@@ -1,43 +1,36 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/router'
+import React, { useState, useEffect } from 'react';
 
 const ContextAuth = React.createContext()
 
 function ProviderAuth(props){
-   const router = useRouter()
-   const [session,setSession] = useState(null)
-   const [authenticated,setAuthenticated] = useState(false)
+   const [session,setSession] = useState()
+   const [loading,setLoading] = useState(true)
 
-   const handleSession = useCallback(async(e) => {
-      let ss = JSON.parse(localStorage.getItem("ss"))
-      if(ss){
-         let authenticated = await (await fetch(`/api/check-auth?token=${ss.token}`)).json()
-         setSession(ss)
-         setAuthenticated(authenticated)
+   useEffect(()=>{
+      const handleAuthenticated = async()=>{
+         let { error, ...rest} = await (await fetch('/api/check-auth')).json()
+         if(!error){
+            setSession(rest)
+         }
+         setLoading(false)
       }
-   }, []);
-
-   useEffect(async()=>{
-      handleSession()
-   },[handleSession])
+      handleAuthenticated()
+   },[])
 
    const createSession = (user)=>{
-      localStorage.setItem("ss", JSON.stringify(user))
       setSession(user)
-      setAuthenticated(true)
    }
 
-   const removeSession = ()=>{
-      localStorage.removeItem("ss")
-      setSession(null)
-      setAuthenticated(false)
+   const removeSession = async()=>{
+      fetch('/api/logout')
+      setSession()
    }
 
    return(
       <ContextAuth.Provider value={{
          session,
+         loading,
          setSession,
-         authenticated,
          createSession,
          removeSession
       }}>

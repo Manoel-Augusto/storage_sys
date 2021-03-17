@@ -4,26 +4,24 @@ import App from '../components/app';
 import Login from '../components/login';
 
 export default function Index(){
-   const { session, authenticated } = useAuth()
+   const { session, loading} = useAuth()
    const { setListRecords, setCheckAll } = useData()
 
-   useEffect(async()=>{
-      if(authenticated && session){
-         let { entries } = await (await fetch(`/api/get-list-folder`,{headers: {'Authorization':`Bearer ${session.token}`}})).json()
-         if(entries){
-            setListRecords(entries)
-            setCheckAll(false)
+   useEffect(()=>{
+      const getData = async()=>{
+         if(session){
+            let { entries } = await fetch('/api/get-list-folder').then(res => res.json())
+            if(entries){
+               setListRecords(entries)
+               setCheckAll(false)
+            }
          }
       }
-   },[authenticated])
+      getData()
+   },[loading, session])
 
-   if(!authenticated){
-      return (
-         <Login/>
-      )
-   }
-
-   return (
-      <App/>
-   )
+   return (<>
+      {!loading && !session && <Login/> }
+      {!loading && session && <App/> }
+   </>)
 }

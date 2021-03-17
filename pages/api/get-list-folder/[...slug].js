@@ -24,13 +24,12 @@ const getListFolder = async(_id, path="")=>{
 
 export default async function handler(req, res){
    try{
-      const { method, headers:{authorization} } = req;
-      if(authorization){
-         const token = authorization.split(' ')[1];
+      const { method, cookies:{tk} } = req;
+      if(tk){
          switch(method){
             case 'GET':
                try{
-                  let { id } = jwt.verify(token, process.env.JWTSECRET);
+                  let { id } = jwt.verify(tk, process.env.JWTSECRET);
                   let { slug } = req.query
                   let rt = await getListFolder(id, `/${slug.join('/')}`)
                   res.status(200).json(rt)

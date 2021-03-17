@@ -24,26 +24,22 @@ export default function FormProfile(){
 
    const sendData = async(e)=>{
       e.preventDefault()
-      let {name, dropboxToken, token} = session
+      let {name, dropboxToken} = session
       let data = {name, dropboxToken}
       if(password.trim()){
          data = {...data, password}
       }
       let rt = await fetch('/api/user', {
-         method:'PUT',
-         headers:{
-            'Content-Type': 'application/json',
-            'Authorization':`Bearer ${token}`
-         },
-         body:JSON.stringify(data),
-      })
-      rt = await rt.json()
+         method:'PUT', 
+         headers:{'Content-Type': 'Application/json'},
+         body:JSON.stringify(data)
+      }).then(res => res.json())
       setSent(true)
       setError(!rt)
    }
 
    if(sent){
-      setTimeout(function(){ setSent(false) }, 4000);
+      setTimeout(function(){ setSent(false); setError(false) }, 4000);
       if(!error){
          var sentContent = (
             <div className="alert alert-success mt-3">
