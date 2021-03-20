@@ -8,19 +8,12 @@ export default function Index(){
    const router = useRouter()
    const { slug } = router.query
    const { session, loading} = useAuth()
-   const { setListRecords, setCheckAll } = useData()
+   const { getData } = useData()
 
    useEffect(()=>{
-      const getData = async()=>{
-         if(session){
-            let { entries } = await fetch(`/api/get-list-folder/${slug.join('/')}`).then(res => res.json())
-            if(entries){
-               setListRecords(entries)
-               setCheckAll(false)
-            }
-         }
+      if(session){
+         getData(slug)
       }
-      getData()
    },[loading, router])
 
 

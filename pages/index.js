@@ -5,19 +5,12 @@ import Login from '../components/login';
 
 export default function Index(){
    const { session, loading} = useAuth()
-   const { setListRecords, setCheckAll } = useData()
+   const { getData } = useData()
 
    useEffect(()=>{
-      const getData = async()=>{
-         if(session){
-            let { entries } = await fetch('/api/get-list-folder').then(res => res.json())
-            if(entries){
-               setListRecords(entries)
-               setCheckAll(false)
-            }
-         }
+      if(session){
+         getData()
       }
-      getData()
    },[loading, session])
 
    return (<>

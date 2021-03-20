@@ -3,5 +3,8 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/": "pages/index.js",
-  "/account/profile": "pages/account/profile.js"
+  "/api/check-auth": "pages/api/check-auth.js",
+  "/[...slug]": "pages/[...slug].js",
+  "/api/get-list-folder": "pages/api/get-list-folder.js",
+  "/api/folder": "pages/api/folder.js"
 }

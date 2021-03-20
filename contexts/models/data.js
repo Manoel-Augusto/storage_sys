@@ -27,6 +27,14 @@ function ProviderData(props){
       setListRecords(newListRecords)
    }
 
+   const getData = async(slug=[])=>{
+      let { entries } = await fetch(`/api/get-list-folder/${slug.join('/')}`).then(res => res.json())
+      if(entries){
+         setListRecords(entries)
+         setCheckAll(false)
+      }
+   }
+
    return(
       <ContextData.Provider value={{
          listRecords,
@@ -35,6 +43,7 @@ function ProviderData(props){
          setCheckAll,
          elCheckAll,
          toggleCheck,
+         getData,
       }}>
          {props.children}
       </ContextData.Provider>

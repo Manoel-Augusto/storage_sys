@@ -1,22 +1,21 @@
 import { useEffect, useRef } from 'react';
+import ModalCreateFolder from './ModalCreateFolder';
 
 export default function ButtonsControl({selected}){
-   const refModal = useRef(null);
+   const refModalCreateFolder = useRef(null);
 
-   const handleModal = (index) => {
-      $(refModal.current).modal('toggle')
+   useEffect(()=>{
+      return () => $(refModalCreateFolder.current).modal('hide')
+   },[])
+
+   const handleModalCreateFolder = () => {
+      $(refModalCreateFolder.current).modal('toggle')
    }
 
    return (
       <div>
-         <button className="btn btn-primary" onClick={() => handleModal()}>Criar Pasta</button>
-         <div className="modal fade" ref={refModal}>
-            <div className="modal-dialog modal-lg">
-               <div className="modal-content">
-                  Hello
-               </div>
-            </div>
-         </div>
+         <button className="btn btn-primary" onClick={() => handleModalCreateFolder()}>Criar Pasta</button>
+         <ModalCreateFolder refModal={refModalCreateFolder} handleModal={handleModalCreateFolder}/>
          {!selected && selected !== null ?
             <div className="d-inline ms-4">
                <div className="btn-group">

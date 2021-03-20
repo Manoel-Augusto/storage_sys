@@ -31,6 +31,7 @@ function ProviderAuth(props){
          session,
          loading,
          setSession,
+         setLoading,
          createSession,
          removeSession
       }}>
