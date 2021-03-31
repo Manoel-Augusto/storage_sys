@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router'
 
 const ContextData = React.createContext()
 
 function ProviderData(props){
+   const router = useRouter()
+   const { slug } = router.query
    const [listRecords, setListRecords] = useState([])
    const [checkAll, setCheckAll] = useState(false)
 
@@ -27,8 +30,9 @@ function ProviderData(props){
       setListRecords(newListRecords)
    }
 
-   const getData = async(slug=[])=>{
-      let { entries } = await fetch(`/api/get-list-folder/${slug.join('/')}`).then(res => res.json())
+   const getData = async()=>{
+      let { entries } = await fetch(`/api/get-list-folder/${(slug || []).join('/')}`)
+         .then(res => res.json())
       if(entries){
          setListRecords(entries)
          setCheckAll(false)

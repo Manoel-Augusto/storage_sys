@@ -6,5 +6,5 @@
   "/api/check-auth": "pages/api/check-auth.js",
   "/[...slug]": "pages/[...slug].js",
   "/api/get-list-folder": "pages/api/get-list-folder.js",
-  "/api/folder": "pages/api/folder.js"
+  "/api/upload": "pages/api/upload.js"
 }

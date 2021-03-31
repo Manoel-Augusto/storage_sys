@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import { useData } from '../../contexts';
-import ButtonsControl from './ButtonsControl'
 import TR from './TR'
 
 export default function Table(){
@@ -21,11 +20,6 @@ export default function Table(){
    }
 
    return(<>
-      <div className="row">
-         <div className="col">
-            <ButtonsControl selected={checkAll}/>
-         </div>
-      </div>
       <div className="row">
          <div className="col">
             <table className="table table-hover">

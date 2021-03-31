@@ -6,15 +6,14 @@ import Login from '../components/login';
 
 export default function Index(){
    const router = useRouter()
-   const { slug } = router.query
    const { session, loading} = useAuth()
    const { getData } = useData()
 
    useEffect(()=>{
       if(session){
-         getData(slug)
+         getData()
       }
-   },[loading, router])
+   },[loading, session, router])
 
 
    return (<>
