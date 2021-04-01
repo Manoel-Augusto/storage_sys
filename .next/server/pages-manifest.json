@@ -3,8 +3,5 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/": "pages/index.js",
-  "/api/check-auth": "pages/api/check-auth.js",
-  "/[...slug]": "pages/[...slug].js",
-  "/api/get-list-folder": "pages/api/get-list-folder.js",
-  "/api/upload": "pages/api/upload.js"
+  "/[...slug]": "pages/[...slug].js"
 }
