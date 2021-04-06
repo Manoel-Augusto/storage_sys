@@ -2,6 +2,9 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
+  "/[...slug]": "pages/[...slug].js",
   "/": "pages/index.js",
-  "/[...slug]": "pages/[...slug].js"
+  "/api/check-auth": "pages/api/check-auth.js",
+  "/api/get-list-folder": "pages/api/get-list-folder.js",
+  "/api/get-list-folder/[...slug]": "pages/api/get-list-folder/[...slug].js"
 }

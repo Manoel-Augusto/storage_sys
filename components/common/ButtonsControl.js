@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import ModalCreateFolder from './ModalCreateFolder';
 import ButtonsUpload from './ButtonsUpload';
+import { useData } from '../../contexts';
 
 export default function ButtonsControl({selected}){
+   const { listRecords } = useData()
    const refModalCreateFolder = useRef(null);
 
    useEffect(()=>{
@@ -11,6 +13,23 @@ export default function ButtonsControl({selected}){
 
    const handleModalCreateFolder = () => {
       $(refModalCreateFolder.current).modal('toggle')
+   }
+
+   const handleDownload = async() => {
+      let listSelected = listRecords.filter(item => item.selected)
+      for(let record of listSelected){
+         let rt = await fetch('/api/download', {
+            method:'POST',
+            body:JSON.stringify({path: record.path_display, type: record[".tag"]}),
+            headers:{'Content-Type': 'application/json'}
+         }).then(r => r.blob())
+         const link = document.createElement('a')
+         const url = window.URL.createObjectURL(rt)
+         link.href = url
+         link.setAttribute('download', record[".tag"]==='file' ? record.name : `${record.name}.zip`)
+         document.body.appendChild(link)
+         link.click()
+      }
    }
 
    return (
@@ -23,7 +42,7 @@ export default function ButtonsControl({selected}){
             </div>
             :
             <div className="d-inline ms-4">
-               <button className="btn btn-secondary">Baixar</button>
+               <button className="btn btn-secondary" onClick={() => handleDownload()}>Baixar</button>
                <button className="btn btn-secondary ms-2">Excluir</button>
             </div>
          }
