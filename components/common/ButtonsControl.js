@@ -4,7 +4,7 @@ import ButtonsUpload from './ButtonsUpload';
 import { useData } from '../../contexts';
 
 export default function ButtonsControl({selected}){
-   const { listRecords } = useData()
+   const { listRecords, getData } = useData()
    const refModalCreateFolder = useRef(null);
 
    useEffect(()=>{
@@ -32,6 +32,20 @@ export default function ButtonsControl({selected}){
       }
    }
 
+   const handleDelete = async() => {
+      let listSelected = listRecords.filter(item => item.selected)
+      for(let record of listSelected){
+         let {error, ...rest} = await fetch('/api/delete', {
+            method:'POST',
+            body:JSON.stringify({path: record.path_display}),
+            headers:{'Content-Type': 'application/json'}
+         }).then(r => r.json())
+         if(!error){
+            getData()
+         }
+      }
+   }
+
    return (
       <div>
          <button className="btn btn-primary" onClick={() => handleModalCreateFolder()}>Criar Pasta</button>
@@ -43,7 +57,7 @@ export default function ButtonsControl({selected}){
             :
             <div className="d-inline ms-4">
                <button className="btn btn-secondary" onClick={() => handleDownload()}>Baixar</button>
-               <button className="btn btn-secondary ms-2">Excluir</button>
+               <button className="btn btn-secondary ms-2" onClick={() => handleDelete()}>Excluir</button>
             </div>
          }
       </div>
