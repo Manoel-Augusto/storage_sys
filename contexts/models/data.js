@@ -8,6 +8,7 @@ function ProviderData(props){
    const { slug } = router.query
    const [listRecords, setListRecords] = useState([])
    const [checkAll, setCheckAll] = useState(false)
+   const [dataShare, setDataShare] = useState(null)
 
    const elCheckAll = useCallback(el => {
       if(el){
@@ -45,6 +46,8 @@ function ProviderData(props){
          setListRecords,
          checkAll,
          setCheckAll,
+         dataShare,
+         setDataShare,
          elCheckAll,
          toggleCheck,
          getData,

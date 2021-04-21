@@ -18,7 +18,7 @@ const ICONFILE = [
 
 ]
 
-export default function TR({data, handleCheck}){
+export default function TR({data, handleCheck, handleShare}){
    if(data[".tag"] === "folder"){
       var icon = ICONFOLDER
    }else{
@@ -50,6 +50,12 @@ export default function TR({data, handleCheck}){
             }
          </td>
          <td>{data.client_modified ? new Date(data.client_modified).toLocaleString() : "--"}</td>
+         <td>
+            <span style={{cursor:'pointer'}} 
+               onClick={() => handleShare(data)}>
+               <i className="fas fa-share-alt"></i>
+            </span>
+         </td>
       </tr>
    )
 }
