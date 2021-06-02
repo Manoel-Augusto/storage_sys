@@ -3,9 +3,5 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/share": "pages/share.js",
-  "/[...slug]": "pages/[...slug].js",
-  "/": "pages/index.js",
-  "/api/check-auth": "pages/api/check-auth.js",
-  "/api/get-list-folder": "pages/api/get-list-folder.js",
-  "/api/get-list-shared": "pages/api/get-list-shared.js"
+  "/[...slug]": "pages/[...slug].js"
 }
