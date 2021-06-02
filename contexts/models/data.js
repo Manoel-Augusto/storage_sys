@@ -9,6 +9,7 @@ function ProviderData(props){
    const [listRecords, setListRecords] = useState([])
    const [checkAll, setCheckAll] = useState(false)
    const [dataShare, setDataShare] = useState(null)
+   const [shared, setShared] = useState(false)
 
    const elCheckAll = useCallback(el => {
       if(el){
@@ -40,10 +41,20 @@ function ProviderData(props){
       }
    }
 
+   const getDataShared = async()=>{
+      let { error, folders, files } = await fetch('/api/get-list-shared')
+         .then(res => res.json())
+      if(!error){
+         setListRecords([...folders.entries, ...files.entries])
+      }
+   }
+
    return(
       <ContextData.Provider value={{
          listRecords,
          setListRecords,
+         shared,
+         setShared,
          checkAll,
          setCheckAll,
          dataShare,
@@ -51,6 +62,7 @@ function ProviderData(props){
          elCheckAll,
          toggleCheck,
          getData,
+         getDataShared,
       }}>
          {props.children}
       </ContextData.Provider>

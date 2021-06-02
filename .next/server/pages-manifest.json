@@ -2,10 +2,6 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/share/[slug]": "pages/share/[slug].js",
-  "/": "pages/index.js",
-  "/api/share-link": "pages/api/share-link.js",
-  "/api/check-auth": "pages/api/check-auth.js",
-  "/[...slug]": "pages/[...slug].js",
-  "/api/share-download": "pages/api/share-download.js"
+  "/share": "pages/share.js",
+  "/": "pages/index.js"
 }

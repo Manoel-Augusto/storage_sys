@@ -2,11 +2,12 @@ import User from '../common/User';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ButtonsControl from '../common/ButtonsControl'
 import Table from '../common/Table';
+import TableShared from '../common/TableShared';
 import { useAuth, useData } from '../../contexts';
 
-export default function Index(){
+export default function Index({share}){
    const { session, removeSession } = useAuth()
-   const { checkAll } = useData()
+   const { checkAll, shared } = useData()
 
    return (
       <div className="container">
@@ -16,14 +17,20 @@ export default function Index(){
                <User logout={removeSession} session={session}/>
             </div>
          </nav>
+         {!shared &&
          <div className="row mb-3">
             <div className="col">
                <ButtonsControl selected={checkAll}/>
             </div>
          </div>
+         }
          <div className="row">
             <div className="col">
-               <Table/>
+               {!shared ?
+                  <Table/>
+                  :
+                  <TableShared/>
+               }
             </div>
          </div>
       </div>

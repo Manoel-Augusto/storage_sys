@@ -7,10 +7,11 @@ import Login from '../components/login';
 export default function Index(){
    const router = useRouter()
    const { session, loading} = useAuth()
-   const { getData } = useData()
+   const { getData, setShared } = useData()
 
    useEffect(()=>{
       if(session){
+         setShared(false)
          getData()
       }
    },[loading, session, router])

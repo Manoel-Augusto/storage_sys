@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const convertBreadcrumb = string => {
-   return string
+   return decodeURIComponent(string
       .replace(/-/g, ' ')
       .replace(/oe/g, 'ö')
       .replace(/ae/g, 'ä')
       .replace(/ue/g, 'ü')
-      .toUpperCase();
+      .toUpperCase());
 };
 
 export default function Breadcrumbs(){
