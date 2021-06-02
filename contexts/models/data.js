@@ -45,7 +45,14 @@ function ProviderData(props){
       let { error, folders, files } = await fetch('/api/get-list-shared')
          .then(res => res.json())
       if(!error){
-         setListRecords([...folders.entries, ...files.entries])
+         let data = []
+         if(folders.entries){
+            data = [...data, ...folders.entries]
+         }
+         if(files.entries){
+            data = [...data, ...files.entries]
+         }
+         setListRecords(data)
       }
    }
 
